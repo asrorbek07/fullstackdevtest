@@ -12,7 +12,7 @@ CREATE TABLE variants (
                           id BIGINT PRIMARY KEY,
                           product_id BIGINT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
                           title TEXT,
-                          option2 TEXT, -- size
-                          price NUMERIC(10,2), -- define precision and scale
+                          option2 TEXT,
+                          price NUMERIC(10,2),
                           available BOOLEAN DEFAULT TRUE
 );

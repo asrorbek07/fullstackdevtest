@@ -39,12 +39,12 @@ class ProductRepository(
             .single()
 
     fun retrieveAllProducts(): List<Product> {
-        var products = jdbcClient.sql(GET_ALL_PRODUCTS_SQL)
+        val products = jdbcClient.sql(GET_ALL_PRODUCTS_SQL)
             .query(productRowMapper)
             .list()
 
         return products.map { product ->
-            var variants = retrieveAllProductVariants(product.id)
+            val variants = retrieveAllProductVariants(product.id)
             product.apply { this.variants = variants }
         }
     }
