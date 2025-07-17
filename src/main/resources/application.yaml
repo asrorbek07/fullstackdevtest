@@ -1,0 +1,15 @@
+spring:
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    clean-disabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/product
+    username: postgres
+    password: postgres1234
+  thymeleaf:
+    prefix: classpath:/templates/
+logging:
+  level:
+    org.flywaydb: DEBUG
