@@ -1,40 +1,104 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!doctype html>
+<html lang="en">
 <head>
-    <title>Products</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Product List</title>
+
+    <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.js"
+            integrity="sha384-oeUn82QNXPuVkGCkcrInrS1twIxKhkZiFfr2TdiuObZ3n3yIeMiqcRzkIcguaof1"
+            crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.19.1/cdn/themes/light.css"/>
+    <script type="module"
+            src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.19.1/cdn/shoelace-autoloader.js"></script>
+
+    <style>
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table {
+            --sl-table-header-background: #f0f0f0;
+            --sl-table-row-hover-background: #f7f7f7;
+            --sl-table-cell-padding: 16px;
+        }
+
+        sl-input {
+            text-align: start;
+            margin: 10px;
+        }
+    </style>
 </head>
-<body>
-<h1>Product List</h1>
-<table>
+<body style="align-items: center">
+<header>
+    <h2>Product List</h2>
+</header>
+<br>
+<sl-button
+        hx-get="/load_products"
+        hx-target="#rows"
+        hx-swap="innerHTML">
+    Load Products
+</sl-button>
+<br>
+<table class="table">
     <thead>
     <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Vendor</th>
-        <th>Product Type</th>
-        <th>Image</th>
+        <th scope="col" style="background-color: #f8f8f8;">Id</th>
+        <th scope="col" style="background-color: #f8f8f8;">Title</th>
+        <th scope="col" style="background-color: #f8f8f8;">Vendor</th>
+        <th scope="col" style="background-color: #f8f8f8;">Product Type</th>
+        <th scope="col" style="background-color: #f8f8f8;">Image</th>
     </tr>
     </thead>
-    <tbody id="product-row" th:fragment="product-row">
-    <tr th:each="product : ${products}">
-        <td th:text="${product.id}">ID</td>
-        <td th:text="${product.title}">Title</td>
-        <td th:text="${product.vendor}">Vendor</td>
-        <td th:text="${product.productType}">Type</td>
-        <td>
+    <tbody id="rows">
+    <tr th:fragment="product-row" th:each="product : ${products}">
+        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
+            th:text="${product.id}">
+        </td>
+        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
+            th:text="${product.title}">
+        </td>
+        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
+            th:text="${product.vendor}">
+        </td>
+        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
+            th:text="${product.productType}">
+        </td>
+        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
+            th:text="${product.vendor}">
+        </td>
+        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
             <img th:if="${product.imageUrl != null}" th:src="${product.imageUrl}" alt="Image" width="50"/>
         </td>
     </tr>
     </tbody>
 </table>
+<br>
+<form hx-post="/register_product" hx-target="#rows" hx-swap="innerHTML" method="post" style="width: 50%">
+    <sl-input label="Title" name="title" required></sl-input>
 
-<h2>Add Product</h2>
-<form th:action="@{/test}" method="post">
-    <label>Title: <input type="text" name="title" required/></label><br/>
-    <label>Vendor: <input type="text" name="vendor" required/></label><br/>
-    <label>Product Type: <input type="text" name="productType" required/></label><br/>
-    <label>Image URL: <input type="text" name="imageUrl"/></label><br/>
-    <button type="submit">Add Product</button>
+    <sl-input label="Handle" name="handle" required></sl-input>
+
+    <sl-input label="Vendor" name="vendor" required></sl-input>
+
+    <sl-input label="Product Type" name="productType" required></sl-input>
+
+    <sl-input label="Image URL" name="imageUrl"></sl-input>
+
+    <sl-button  type="submit">Submit</sl-button>
 </form>
 </body>
 </html>

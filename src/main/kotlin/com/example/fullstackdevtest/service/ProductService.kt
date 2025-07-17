@@ -15,8 +15,8 @@ class ProductService(
 ) {
     private val url = "https://famme.no/products.json"
 
-    @Scheduled(initialDelay = 0, fixedDelay = 10, timeUnit = TimeUnit.SECONDS)
-    fun fetchAndSaveProducts() {
+    @Scheduled(initialDelay = 0, fixedDelay = 100, timeUnit = TimeUnit.SECONDS)
+    fun fetchAndRegisterProducts() {
         if (repo.retrieveProductCount() > 0) {
             return
         }
@@ -28,23 +28,23 @@ class ProductService(
             ProductResponse::class.java
         )
         val products = responseEntity.body?.products ?: emptyList<Product>()
-        saveProducts(products)
+        registerProducts(products)
     }
 
-    fun getAllProducts(): List<Product> {
+    fun findAllProducts(): List<Product> {
         return repo.retrieveAllProducts()
     }
 
-    fun saveProduct(product: Product): Long {
+    fun registerProduct(product: Product): Long {
         return repo.createProduct(product)
     }
 
-    fun saveProducts(products: List<Product>) {
+    fun registerProducts(products: List<Product>) {
         products.take(10).forEach { product ->
             if (repo.existsProduct(product.id)) {
                 return@forEach
             }
-            val productId = saveProduct(product)
+            val productId = registerProduct(product)
             product.variants?.forEach { variant ->
                 variant.productId = productId
                 repo.createVariant(variant)

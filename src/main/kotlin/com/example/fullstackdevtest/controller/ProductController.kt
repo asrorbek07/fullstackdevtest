@@ -14,27 +14,26 @@ import kotlin.random.Random
 class ProductController(
     private val productService: ProductService
 ) {
-    @GetMapping("/test")
-    fun getList(model: Model): String {
-        model.addAttribute("products", productService.getAllProducts())
+    @GetMapping("/")
+    fun findProducts(model: Model): String {
         return "product"
     }
 
-    @GetMapping("/load")
-    fun reload(model: Model): String {
-        model.addAttribute("products", productService.getAllProducts())
+    @GetMapping("/load_products")
+    fun loadProducts(model: Model): String {
+        model.addAttribute("products", productService.findAllProducts())
         return "product :: product-row"
     }
 
-    @PostMapping("/test")
-    fun addProduct(
+    @PostMapping("/register_product")
+    fun registerProduct(
         model: Model,
         @RequestParam("title") title: String,
         @RequestParam("vendor") vendor: String,
         @RequestParam("productType") productType: String,
         @RequestParam("imageUrl", required = false) imageUrl: String?
     ): String {
-        productService.saveProduct(
+        productService.registerProduct(
             Product(
                 id = Random.nextLong().absoluteValue,
                 title = title,
@@ -44,7 +43,7 @@ class ProductController(
                 variants = null
             )
         )
-        model.addAttribute("products", productService.getAllProducts())
+        model.addAttribute("products", productService.findAllProducts())
         return "product :: product-row"
     }
 }

@@ -9,6 +9,7 @@ class Product(
     val title: String,
     val vendor: String? = null,
     val productType: String? = null,
-    val imageUrl: String? = null,
+    val images: List<Image>? = null,
+    val imageUrl: String? = images?.firstOrNull()?.src,
     var variants: List<Variant>? = null
 )
