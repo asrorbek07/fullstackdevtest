@@ -32,6 +32,8 @@ class ProductRepository(
     private val EXISTS_PRODUCT_SQL = """
         SELECT COUNT(*) FROM products WHERE id = ?
     """
+    private val DELETE_PRODUCT_BY_ID_SQL = "DELETE FROM products WHERE id = ?"
+
 
     fun retrieveProductCount(): Long =
         jdbcClient.sql(GET_PRODUCT_COUNT_SQL)
@@ -79,6 +81,15 @@ class ProductRepository(
             .params(productId)
             .query(Long::class.java)
             .single() > 0
+
+    fun deleteProduct(productId: Long): Boolean {
+        val rowsAffected = jdbcClient.sql(DELETE_PRODUCT_BY_ID_SQL)
+            .params(productId)
+            .update()
+
+        return rowsAffected > 0
+    }
+
 
     private val productRowMapper = RowMapper { rs, _ ->
         Product(

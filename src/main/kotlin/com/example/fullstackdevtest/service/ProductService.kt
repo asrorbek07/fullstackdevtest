@@ -51,4 +51,12 @@ class ProductService(
                 }
             }
     }
+
+    fun deleteProductById(productId: Long): Boolean {
+        if (!repo.existsProduct(productId)) {
+            throw IllegalArgumentException("Product with id $productId does not exist")
+        }
+        return repo.deleteProduct(productId)
+    }
+
 }

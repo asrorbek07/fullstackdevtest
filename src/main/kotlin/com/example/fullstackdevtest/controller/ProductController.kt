@@ -46,4 +46,15 @@ class ProductController(
         model.addAttribute("products", productService.findAllProducts())
         return "product :: product-row"
     }
+
+    @PostMapping("/delete_product")
+    fun deleteProduct(
+        model: Model,
+        @RequestParam("productId") productId: Long
+    ): String {
+        productService.deleteProductById(productId)
+        model.addAttribute("products", productService.findAllProducts())
+        return "product :: product-row"
+    }
+
 }

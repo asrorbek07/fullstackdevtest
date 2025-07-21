@@ -61,6 +61,8 @@
         <th scope="col" style="background-color: #f8f8f8;">Vendor</th>
         <th scope="col" style="background-color: #f8f8f8;">Product Type</th>
         <th scope="col" style="background-color: #f8f8f8;">Image</th>
+        <th scope="col" style="background-color: #f8f8f8;">Actions</th>
+
     </tr>
     </thead>
     <tbody id="rows">
@@ -82,6 +84,16 @@
         </td>
         <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
             <img th:if="${product.imageUrl != null}" th:src="${product.imageUrl}" alt="Image" width="50"/>
+        </td>
+        <td>
+            <sl-button
+                    variant="danger"
+                    th:attr="hx-post='/delete_product?productId=' + ${product.id}"
+                    hx-target="#rows"
+                    hx-swap="innerHTML"
+                    hx-confirm="Are you sure you want to delete this product?">
+                Delete
+            </sl-button>
         </td>
     </tr>
     </tbody>
