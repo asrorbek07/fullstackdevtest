@@ -15,9 +15,9 @@ class ProductService(
 ) {
     private val url = "https://famme.no/products.json"
 
-    @Scheduled(initialDelay = 0, fixedDelay = 100, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(initialDelay = 0, fixedDelay = 5, timeUnit = TimeUnit.SECONDS)
     fun fetchAndRegisterProducts() {
-        if (repo.retrieveProductCount() > 0) {
+        if (repo.retrieveProductCount() >= 50) {
             return
         }
         val restTemplate = RestTemplate()
@@ -40,15 +40,15 @@ class ProductService(
     }
 
     fun registerProducts(products: List<Product>) {
-        products.take(10).forEach { product ->
-            if (repo.existsProduct(product.id)) {
-                return@forEach
+        products
+            .filterNot { repo.existsProduct(it.id) }
+            .take(5)
+            .forEach { product ->
+                val productId = registerProduct(product)
+                product.variants?.forEach { variant ->
+                    variant.productId = productId
+                    repo.createVariant(variant)
+                }
             }
-            val productId = registerProduct(product)
-            product.variants?.forEach { variant ->
-                variant.productId = productId
-                repo.createVariant(variant)
-            }
-        }
     }
 }
